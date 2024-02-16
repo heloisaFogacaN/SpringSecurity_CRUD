@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -24,8 +25,8 @@ public class UserController {
 
 
     @PostMapping()
-    public void create(@RequestBody UserDTO userDTO){
-        userService.save(userDTO);
+    public User create(@RequestBody UserDTO userDTO){
+       return userService.save(userDTO);
     }
 
     @PutMapping()
@@ -49,18 +50,18 @@ public class UserController {
 
     }
 
-    @PatchMapping("/password/{id}")
+    @PostMapping("/password/{id}")
     public void changePassword(@RequestParam Integer id, @RequestParam String password) throws Exception {
         userService.updatePassword(id, password);
     }
 
-    @PatchMapping("/status/{id}")
-    public void changeStatus(@RequestParam Integer id, @RequestParam boolean status) throws Exception {
-        userService.updateStatus(id, status);
+    @PostMapping("/status/{id}")
+    public void changeStatus(@RequestParam Integer id, @RequestParam boolean status) throws IOException {
+
     }
 
     @PostMapping("/cadastrar")
-    public void editarPatch(@RequestParam String user, @RequestParam MultipartFile file) throws Exception {
-        userService.save(user, file);
+    public User editarPatch(@RequestParam String user, @RequestParam MultipartFile file) throws Exception {
+       return userService.save(user, file);
     }
 }

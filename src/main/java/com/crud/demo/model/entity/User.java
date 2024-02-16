@@ -1,9 +1,13 @@
 package com.crud.demo.model.entity;
 
+import com.crud.demo.UserDetailsEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -19,5 +23,9 @@ public class User {
     private String email;
     private String password;
     private boolean status;
-    private byte[] files;
+    private boolean enabled;
+    @OneToOne(cascade = CascadeType.ALL)
+    private UserDetailsEntity userDetailsEntity;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Arquivo> files = new ArrayList<>();
 }

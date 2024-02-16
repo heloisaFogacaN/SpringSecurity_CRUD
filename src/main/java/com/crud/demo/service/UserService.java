@@ -4,12 +4,14 @@ import com.crud.demo.model.dto.UserDTO;
 import com.crud.demo.model.dto.UserEditDTO;
 import com.crud.demo.model.entity.User;
 import com.crud.demo.repository.UserRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @AllArgsConstructor
@@ -21,10 +23,10 @@ public class UserService {
     private final ObjectMapper objectMapper;
 
 
-    public void save(UserDTO userDTO) {
+    public User save(UserDTO userDTO) {
         User user = new User();
         BeanUtils.copyProperties(userDTO, user);
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     public void update(UserEditDTO userDTO) {
@@ -67,9 +69,10 @@ public class UserService {
         }
     }
 
-    public void save(String user, MultipartFile file) throws Exception {
+    public User save(String user, MultipartFile file) throws IOException {
         UserDTO userDTO = objectMapper.readValue(user, UserDTO.class);
         userDTO.setFiles(List.of(file));
-        save(userDTO);
+        return save(userDTO);
+
     }
 }
