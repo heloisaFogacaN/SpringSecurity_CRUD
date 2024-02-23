@@ -23,7 +23,6 @@ public class UserController {
 
     private UserService userService;
 
-
     @PostMapping()
     public User create(@RequestBody UserDTO userDTO){
        return userService.save(userDTO);
@@ -39,7 +38,7 @@ public class UserController {
         return userService.findOne(id);
     }
 
-    @GetMapping
+    @GetMapping("/users")
     public List<User> findAll(){
         return userService.findAll();
     }
