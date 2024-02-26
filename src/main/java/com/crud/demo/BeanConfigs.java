@@ -25,7 +25,7 @@ public class BeanConfigs {
     @Bean
     public AuthenticationManager authenticationManager() {
         DaoAuthenticationProvider dao = new DaoAuthenticationProvider();
-        dao.setPasswordEncoder(new BCryptPasswordEncoder());
+//        dao.setPasswordEncoder(new BCryptPasswordEncoder());
         dao.setUserDetailsService(autenticacaoService);
         return new ProviderManager(dao);
     }
@@ -35,16 +35,16 @@ public class BeanConfigs {
         return new HttpSessionSecurityContextRepository();
     }
 
-}
 //   @Autowired
 //    public void configureGlobal(AuthenticationManagerBuilder auth, AutenticacaoService autenticacaoService) throws Exception{
 //        auth.userDetailsService(autenticacaoService).passwordEncoder(NoOpPasswordEncoder.getInstance());
 //    }
 
-//    @Bean
-//    public PasswordEncoder passwordEncoder(){
-//        return NoOpPasswordEncoder.getInstance();
-//    }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}
 
 //    @Bean
 //    public UserDetailsService userDetailsService(AutenticacaoService autenticacaoService){

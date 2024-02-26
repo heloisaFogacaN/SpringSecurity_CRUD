@@ -5,6 +5,7 @@ import com.crud.demo.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class DataBaseConfig {
                 .credentialsNonExpired(true)
                 .authorities(List.of(Autorizacao.GET))
                 .username("teste")
-                .password("teste123")
+                .password(new BCryptPasswordEncoder().encode("teste123"))
                 .build());
 
         userRepository.save(user);
