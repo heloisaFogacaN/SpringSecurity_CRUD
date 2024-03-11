@@ -1,9 +1,6 @@
 package com.crud.demo;
 
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Date;
@@ -25,8 +22,8 @@ public class JwtUtil {
                 .compact();
     }
 
-    public void validarToken(String token) {
-        getParser().parseSignedClaims(token);
+    private Jws<Claims> validarToken(String token) {
+        return  getParser().parseSignedClaims(token);
     }
 
     private JwtParser getParser() {
@@ -35,8 +32,7 @@ public class JwtUtil {
     }
 
     public String getUsername(String token) {
-        return getParser()
-                .parseSignedClaims(token)
+        return validarToken(token)
                 .getPayload()
                 .getSubject();
     }
