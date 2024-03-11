@@ -39,7 +39,6 @@ public class UserService {
         User user;
         try {
             user = userRepository.findById(id).get();
-            user.setPassword(password);
             userRepository.save(user);
         } catch (Exception e){
             throw new Exception("Usuário com id " + id + " não foi encontrado!");

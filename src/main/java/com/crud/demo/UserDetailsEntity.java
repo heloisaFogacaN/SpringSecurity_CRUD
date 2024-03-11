@@ -18,20 +18,21 @@ import java.util.Collection;
 @NoArgsConstructor
 @Builder
 public class UserDetailsEntity implements UserDetails {
+    // o que eu não for usar, deve retornar true e, caso seja o authorities deve retornar uma lista vazia
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true, nullable = false, updatable = false)
-    private String username;
+    private String username; // essa é uma das opções, posso considerar essa ou apenas adicionar no construtor o user, questão de estética
     @Length(min = 6)
-    private String password;
-    private boolean enabled;
-    private Collection<Autorizacao> authorities;
+    private String password; // essa é uma das opções, posso considerar essa ou apenas adicionar no construtor o user, questão de estética
+    private boolean enabled; // importante
+    private Collection<Autorizacao> authorities; // importante
     private boolean accountNonExpired;
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
     @OneToOne(mappedBy = "userDetailsEntity")
-    @JsonIgnore
+    @JsonIgnore // Isso permite que o spring security acesse os dados do meu user
     private User user;
 
 //    @Id

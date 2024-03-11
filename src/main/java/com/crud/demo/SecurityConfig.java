@@ -22,19 +22,20 @@ import org.springframework.security.web.context.SecurityContextRepository;
 @Configuration
 @AllArgsConstructor
 public class SecurityConfig {
-    private final SecurityContextRepository repo;
+    private final SecurityContextRepository repo; // armazena em memória o usuário da sessão
 
     @Bean
     public SecurityFilterChain config(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable);
+        http.csrf(AbstractHttpConfigurer::disable); // gera um token para garantir se realemnte a requisição que está vindo do cliente é viável(autenticado) ou não, só está disable, para que ós pudessemos concluir com mais rapidez
         http.authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
-                        .requestMatchers(HttpMethod.GET, "/user").hasAuthority("Get")
+                        .requestMatchers(HttpMethod.GET, "/user").hasAuthority("Get") //
                         .requestMatchers(HttpMethod.GET, "/user/users").permitAll()
                         .anyRequest().authenticated());
-        http.securityContext((context) -> context.securityContextRepository(repo));
+        http.securityContext((context) -> context.securityContextRepository(repo)); // Manter a  sessão do usuário ativa
 
         http.formLogin(Customizer.withDefaults());
+//        http.httpBasic(Customizer.withDefaults()); esse permite que ele fique no topo da página
         http.logout(Customizer.withDefaults());
         return http.build();
     }

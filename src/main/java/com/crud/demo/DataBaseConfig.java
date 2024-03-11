@@ -16,6 +16,7 @@ public class DataBaseConfig {
 
     @PostConstruct
     public void init(){
+
         User user = new User();
         user.setName("Teste");
         user.setUserDetailsEntity(UserDetailsEntity.builder()

@@ -21,11 +21,12 @@ public class User {
 
     private String name;
     private String email;
-    private String password;
+//    private String password;
     private boolean status;
     private boolean enabled;
     @OneToOne(cascade = CascadeType.ALL)
     private UserDetailsEntity userDetailsEntity;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Arquivo> files = new ArrayList<>();
+
 }

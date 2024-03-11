@@ -30,7 +30,7 @@ public class AuteticacaoController {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(usuario.getUsername(), usuario.getPassword()); // Ele sempre recebe o username  e o password para criar o token deste usuário
             Authentication authentication = authenticationManager.authenticate(authenticationToken); // certifica se o usuário já está autenticado ou não
 
-            // Sem o contexto é necessário em toda requisição passar o username e o password do usuário, o que é um trbalho desnecessário
+            // Sem o contexto é necessário em toda requisição passar o username e o password do usuário, o que é um trabalho desnecessário
 
             SecurityContext context = SecurityContextHolder.createEmptyContext(); // Criando um contexto vazio(só porque o authentication deu certo)
             context.setAuthentication(authentication);
