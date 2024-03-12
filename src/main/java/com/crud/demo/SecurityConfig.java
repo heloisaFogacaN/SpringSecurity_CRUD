@@ -11,11 +11,13 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 
@@ -23,6 +25,7 @@ import org.springframework.security.web.context.SecurityContextRepository;
 @AllArgsConstructor
 public class SecurityConfig {
     private final SecurityContextRepository repo; // armazena em memória o usuário da sessão
+    private final FiltroAutenticacao filtroAutenticacao = new FiltroAutenticacao();
 
     @Bean
     public SecurityFilterChain config(HttpSecurity http) throws Exception {
@@ -37,6 +40,10 @@ public class SecurityConfig {
         http.formLogin(Customizer.withDefaults());
 //        http.httpBasic(Customizer.withDefaults()); esse permite que ele fique no topo da página
         http.logout(Customizer.withDefaults());
+        http.sessionManagement(config->{
+            config.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        });
+        http.addFilterBefore(filtroAutenticacao, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
