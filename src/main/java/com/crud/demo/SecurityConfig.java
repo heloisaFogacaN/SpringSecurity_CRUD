@@ -16,14 +16,14 @@ import org.springframework.security.web.context.SecurityContextRepository;
 @AllArgsConstructor
 public class SecurityConfig {
     private final SecurityContextRepository repo; // armazena em memória o usuário da sessão
-    private final FiltroAutenticacao filtroAutenticacao = new FiltroAutenticacao();
+    private final FiltroAutenticacao filtroAutenticacao;
 
     @Bean
     public SecurityFilterChain config(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable); // gera um token para garantir se realemnte a requisição que está vindo do cliente é viável(autenticado) ou não, só está disable, para que ós pudessemos concluir com mais rapidez
         http.authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
-                        .requestMatchers(HttpMethod.GET, "/user").hasAuthority("Get") //
+                        .requestMatchers(HttpMethod.GET, "/user").hasAuthority(Autorizacao.GET.getAuthority()) //
                         .requestMatchers(HttpMethod.GET, "/user/users").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .anyRequest().authenticated());
@@ -32,8 +32,9 @@ public class SecurityConfig {
 //        http.formLogin(Customizer.withDefaults());
 //        http.httpBasic(Customizer.withDefaults()); esse permite que ele fique no topo da página
         http.formLogin(AbstractHttpConfigurer::disable);
-        http.logout(Customizer.withDefaults());
-        http.sessionManagement(config->{
+//        http.logout(Customizer.withDefaults());
+        http.logout(AbstractHttpConfigurer::disable);
+        http.sessionManagement(config -> {
             config.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         });
         http.addFilterBefore(filtroAutenticacao, UsernamePasswordAuthenticationFilter.class);

@@ -38,7 +38,7 @@ public class UserController {
         return userService.findOne(id);
     }
 
-    @GetMapping("/users")
+    @GetMapping
     public List<User> findAll(){
         return userService.findAll();
     }

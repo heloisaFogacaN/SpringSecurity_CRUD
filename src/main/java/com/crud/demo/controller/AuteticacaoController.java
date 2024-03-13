@@ -26,8 +26,8 @@ public class AuteticacaoController {
     private final JwtUtil jwtUtil = new JwtUtil();
     private final CookieUtil cookieUtil = new CookieUtil();
 
-    @PostMapping("/auth/login")
-    public ResponseEntity<String> authenticate(@RequestBody UsuarioLogin usuario, HttpServletRequest request, HttpServletResponse response){
+    @PostMapping("/login")
+    public ResponseEntity<String> authenticate(@RequestBody UsuarioLogin usuario, HttpServletRequest request, HttpServletResponse response) {
 
         try {
 
@@ -39,9 +39,17 @@ public class AuteticacaoController {
             response.addCookie(cookie);
 
             return ResponseEntity.ok("Autentificação bem-sucedida");
-        } catch (AuthenticationException e){
+        } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Falha na autenticação!");
 
         }
+    }
+
+    @PostMapping("/logout")
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        Cookie cookie = cookieUtil.getCookie(request, "JWT");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
     }
 }
