@@ -25,11 +25,13 @@ public class SecurityConfig {
                 authorizeRequests
                         .requestMatchers(HttpMethod.GET, "/user").hasAuthority("Get") //
                         .requestMatchers(HttpMethod.GET, "/user/users").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .anyRequest().authenticated());
         http.securityContext((context) -> context.securityContextRepository(repo)); // Manter a  sessão do usuário ativa
 
-        http.formLogin(Customizer.withDefaults());
+//        http.formLogin(Customizer.withDefaults());
 //        http.httpBasic(Customizer.withDefaults()); esse permite que ele fique no topo da página
+        http.formLogin(AbstractHttpConfigurer::disable);
         http.logout(Customizer.withDefaults());
         http.sessionManagement(config->{
             config.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
