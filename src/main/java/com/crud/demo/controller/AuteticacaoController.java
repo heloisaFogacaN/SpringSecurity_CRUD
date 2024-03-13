@@ -26,7 +26,7 @@ public class AuteticacaoController {
     private final JwtUtil jwtUtil = new JwtUtil();
     private final CookieUtil cookieUtil = new CookieUtil();
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<String> authenticate(@RequestBody UsuarioLogin usuario, HttpServletRequest request, HttpServletResponse response) {
 
         try {
@@ -46,10 +46,15 @@ public class AuteticacaoController {
     }
 
     @PostMapping("/logout")
-    public void logout(HttpServletRequest request, HttpServletResponse response) {
-        Cookie cookie = cookieUtil.getCookie(request, "JWT");
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
+    public void logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        try {
+            Cookie cookie = cookieUtil.getCookie(request, "JWT");
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+        } catch (Exception e) {
+            response.setStatus(401);
+        }
+
 
     }
 }

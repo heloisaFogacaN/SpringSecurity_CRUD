@@ -30,22 +30,30 @@ public class FiltroAutenticacao extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if (!rotaPublica(request)) {
-            // Busca e valida
-            Cookie cookie = cookieUtil.getCookie(request, "JWT");
+            // Busca um cookie
+            Cookie cookie;
+            try {
+                cookie = cookieUtil.getCookie(request, "JWT");
+            } catch (Exception e) {
+                response.setStatus(401);
+                return;
+            }
+            // Valida o JWT
             String token = cookie.getValue();
             String username = jwtUtil.getUsername(token);
 
             // Criação do usuário autenticado
             UserDetails user = autenticacaoService.loadUserByUsername(username);
-
-
             Authentication authentication = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
 
             // Salvamento do usuário autenticadpp no Security Context
             SecurityContext context = SecurityContextHolder.createEmptyContext(); // Criando um contexto vazio(só porque o authentication deu certo)
             context.setAuthentication(authentication);
             securityContextRepository.saveContext(context, request, response); // Salva o contexto com o objeto autenticado para que toda vez que for fazer uma requisição o próprio já reconheça que há um salvo, mantém o usuário ativo
-            // SecurityContextHolder.setContext(context);
+
+            // Renovação do JWT e do cookie
+            Cookie cookieRenvado = cookieUtil.gerarCookieJwt(user);
+            response.addCookie(cookieRenvado);
         }
         // Continuação da requisição
         filterChain.doFilter(request, response);

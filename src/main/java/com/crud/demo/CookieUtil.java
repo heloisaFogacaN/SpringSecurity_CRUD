@@ -14,7 +14,12 @@ public class CookieUtil {
                 return cookie;
     }
 
-    public Cookie getCookie(HttpServletRequest request, String name){
-        return WebUtils.getCookie(request, name); //
+    public Cookie getCookie(HttpServletRequest request, String name) throws Exception {
+
+        Cookie cookie =  WebUtils.getCookie(request, name);
+        if (cookie != null){
+            return cookie;
+        }
+        throw new Exception("Cookie não encontrado!");
     }
 }
