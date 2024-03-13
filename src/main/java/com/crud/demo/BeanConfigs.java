@@ -13,6 +13,7 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
@@ -23,17 +24,20 @@ public class BeanConfigs {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
-        corsConfiguration.setAllowedMethods(List.of("POST"));
-        corsConfiguration.setAllowCredentials(true);
-        
+        CorsConfiguration corsConfig = new CorsConfiguration();
+        corsConfig.setAllowedOrigins(List.of("http://localhost:3000"));
+        corsConfig.setAllowedMethods(List.of("GET"));
+        corsConfig.setAllowCredentials(true);
+        corsConfig.setAllowedHeaders(List.of("*"));
+        UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        corsConfigurationSource.registerCorsConfiguration("/**", corsConfig);
+        return corsConfigurationSource;
     }
 
     @Bean
     public AuthenticationManager authenticationManager() {
         DaoAuthenticationProvider dao = new DaoAuthenticationProvider();  // provider
-//        dao.setPasswordEncoder(new BCryptPasswordEncoder());
+        dao.setPasswordEncoder(new BCryptPasswordEncoder());
         dao.setUserDetailsService(autenticacaoService);
         return new ProviderManager(dao);
     }
@@ -43,10 +47,10 @@ public class BeanConfigs {
         return new HttpSessionSecurityContextRepository();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
 }
 
 //   @Autowired

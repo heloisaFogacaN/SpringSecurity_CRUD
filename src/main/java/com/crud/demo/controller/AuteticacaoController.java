@@ -26,16 +26,17 @@ public class AuteticacaoController {
     private final JwtUtil jwtUtil = new JwtUtil();
     private final CookieUtil cookieUtil = new CookieUtil();
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ResponseEntity<String> authenticate(@RequestBody UsuarioLogin usuario, HttpServletRequest request, HttpServletResponse response){
+
         try {
+
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(usuario.getUsername(), usuario.getPassword()); // Ele sempre recebe o username  e o password para criar o token deste usuário
             Authentication authentication = authenticationManager.authenticate(authenticationToken); // certifica se o usuário já está autenticado ou não
 
             UserDetails user = (UserDetails) authentication.getPrincipal(); // username
             Cookie cookie = cookieUtil.gerarCookieJwt(user);
             response.addCookie(cookie);
-
 
             return ResponseEntity.ok("Autentificação bem-sucedida");
         } catch (AuthenticationException e){
